@@ -4,7 +4,12 @@ const router = express.Router();
 const userRouter = require("./userRoute");
 const productRouter = require("./productRoute");
 const orderRouter = require("./orderRoute");
+const userController = require("../controllers/user.controller");
+
+router.post("/register", userController.createUser);
 
 router.use("/api/users", userRouter);
-router.use("/api/products", productRouter);
-router.use("/api/orders", orderRouter);
+// router.use("/api/products", productRouter);
+// router.use("/api/orders", orderRouter);
+
+module.exports = router;
