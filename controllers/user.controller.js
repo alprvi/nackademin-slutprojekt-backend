@@ -6,7 +6,6 @@ const userController = {
       req.body.email,
       req.body.password
     );
-    console.log(result);
     if (!result.loggedIn) res.status(403).send(result.message);
     res.header("x-access-token", result.token).sendStatus(200);
   },
