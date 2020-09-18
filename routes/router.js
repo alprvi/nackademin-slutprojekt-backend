@@ -6,8 +6,8 @@ const productRouter = require("./productRoute");
 const orderRouter = require("./orderRoute");
 const userController = require("../controllers/user.controller");
 
-router.post("/api/register", userController.createUser);
-router.post("/api/auth", userController.login);
+router.post("/api/register", userController.registerUser);
+router.post("/api/auth", userController.authenticateUser);
 
 router.use("/api/users", userRouter);
 // router.use("/api/products", productRouter);

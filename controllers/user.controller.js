@@ -1,13 +1,16 @@
 const { userModel } = require("../models/user.model");
 
 const userController = {
-  async login(req, res) {
-    const result = await userModel.login(req.body.email, req.body.password);
+  async authenticateUser(req, res) {
+    const result = await userModel.authenticateUser(
+      req.body.email,
+      req.body.password
+    );
     console.log(result);
     if (!result.loggedIn) res.status(403).send(result.message);
     res.header("x-access-token", result.token).sendStatus(200);
   },
-  async createUser(req, res) {
+  async registerUser(req, res) {
     // Check if user already exists HERE
     let user = {
       name: req.body.name,
@@ -15,7 +18,7 @@ const userController = {
       password: req.body.password,
     };
 
-    let userCreated = await userModel.createUser(user);
+    let userCreated = await userModel.registerUser(user);
     if (!userCreated) return res.sendStatus(500);
     res.sendStatus(201);
   },

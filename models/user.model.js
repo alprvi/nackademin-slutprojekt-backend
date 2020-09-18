@@ -2,8 +2,6 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const { createUser } = require("../controllers/user.controller");
-
 const schema = {
   email: {
     type: String,
@@ -52,7 +50,7 @@ userSchema.pre("save", async function (next) {
 const User = mongoose.model("user", userSchema);
 
 const userModel = {
-  async login(email, password) {
+  async authenticateUser(email, password) {
     try {
       const user = await User.findOne({ email: email });
       if (!user)
@@ -78,7 +76,7 @@ const userModel = {
       return false;
     }
   },
-  async createUser(user) {
+  async registerUser(user) {
     try {
       return await User.create(user);
     } catch (error) {
