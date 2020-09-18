@@ -19,7 +19,7 @@ const schema = {
   },
   role: {
     type: String,
-    default: "user",
+    default: "customer",
   },
   adress: {
     street: {
@@ -67,7 +67,7 @@ const userModel = {
         };
 
       // Create token
-      const token = userModel.generateAuthToken(user);
+      const token = await userModel.generateAuthToken(user);
       return {
         loggedIn: true,
         token,
@@ -120,7 +120,10 @@ const userModel = {
   },
 
   async generateAuthToken(user) {
-    return jwt.sign({ userId: user._id, name: user.name, role: user.role });
+    return jwt.sign(
+      { userId: user._id, name: user.name, role: user.role },
+      process.env.JWT_SECRET
+    );
   },
 };
 
