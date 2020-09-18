@@ -4,6 +4,9 @@ const router = require("./routes/router");
 
 app.use(express.static("public"));
 
-// app.use("/", router);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/", router);
 
 module.exports = app;

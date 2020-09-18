@@ -36,7 +36,6 @@ module.exports = {
     return new Promise((resolve, reject) => {
       Product.create(data, (err, newDoc) => {
         if (err) reject(err);
-        console.log(newDoc,'here')
         resolve(newDoc);
       })
     })
@@ -56,5 +55,14 @@ module.exports = {
         resolve(newDoc);
       })
     })
+  },
+  updateProduct: (productUpdated, id) => {
+    return Product.findByIdAndUpdate(id, productUpdated, {
+      new: true,
+      runValidators: true
+    })
+  },
+  deleteProduct: (id) => {
+    return Product.remove({ _id: id })
   }
 };

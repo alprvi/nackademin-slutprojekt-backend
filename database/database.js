@@ -19,4 +19,8 @@ mongoose.connection.once("open", function () {
   console.log(`MongoDB is ready`);
 });
 
-module.exports = { connectDB };
+async function disconnect () {
+  await mongoose.connection.close()
+}
+
+module.exports = { connectDB,disconnect };
