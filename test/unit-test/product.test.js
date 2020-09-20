@@ -9,7 +9,7 @@ describe('Product Model', () => {
   })
 
   after(async () => {
-    await Database.disconnect()
+    await Database.disconnectDB()
   })
 
   beforeEach(async function () {
