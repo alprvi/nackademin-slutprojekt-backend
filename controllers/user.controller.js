@@ -7,7 +7,7 @@ const userController = {
       req.body.password
     );
     if (!result.loggedIn) res.status(403).send(result.message);
-    res.status(200).send({
+    res.header().status(200).send({
       token: result.token,
       user: result.user,
     });
