@@ -22,12 +22,15 @@ const schema = {
   adress: {
     street: {
       type: String,
+      required: true,
     },
     zip: {
       type: Number,
+      required: true,
     },
     city: {
       type: String,
+      required: true,
     },
   },
   orderHistory: {
