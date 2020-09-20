@@ -6,6 +6,7 @@ const schema = {
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -116,6 +117,15 @@ const userModel = {
       return await User.findOne({ _id: id });
     } catch (error) {
       console.error(error);
+      return false;
+    }
+  },
+
+  async getUserByEmail(useremail) {
+    try {
+      return await User.findOne({ email: useremail });
+    } catch (error) {
+      console.log(error);
       return false;
     }
   },
