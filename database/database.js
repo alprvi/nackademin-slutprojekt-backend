@@ -1,55 +1,52 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-let connectDB, uri
-switch ((process.env.ENVIRONMENT)) {
-  case 'test':
-    connectDB = async () => {
-      uri = `mongodb://127.0.0.1:27017/Nackademin-slutprojekt-test`
-      try {
-        await mongoose.connect(uri, {
-          useUnifiedTopology: true,
-          useNewUrlParser: true,
-          useCreateIndex: true,
-          useFindAndModify: true,
-        });
-      } catch (error) {
-        console.error(`It went wrong: ${error}`);
-      }
+process.env.ENVIRONMENT = process.env.ENVIRONMENT || "development";
+let mongoDB;
 
-      mongoose.connection.once("open", function () {
-        console.log(`MongoDB Test is ready`);
-      });
+switch (process.env.ENVIRONMENT) {
+  case "development":
+  case "dev":
+  case "staging":
+    mongoDB = {
+      getUri: async () =>
+        `mongodb+srv://${process.env.DBHOST}:${process.env.DBPASSWORD}@cluster0.rv20u.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`,
     };
     break;
-  case 'development':
-  case 'production':
-  case 'staging':
-    connectDB = async () => {
-      uri = `mongodb+srv://${process.env.DBHOST}:${process.env.DBPASSWORD}@cluster0.rv20u.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
-      try {
-        await mongoose.connect(uri, {
-          useUnifiedTopology: true,
-          useNewUrlParser: true,
-          useCreateIndex: true,
-          useFindAndModify: true,
-        });
-      } catch (error) {
-        console.error(`It went wrong: ${error}`);
-      }
-
-      mongoose.connection.once("open", function () {
-        console.log(`MongoDB is ready`);
-      });
-    };
+  case "test":
+    const { MongoMemoryServer } = require("mongodb-memory-server");
+    mongoDB = new MongoMemoryServer();
     break;
-
+  default:
+    throw new Error(`${process.env.ENVIRONMENT} is not a valid environment`);
 }
 
+const connectDB = async () => {
+  const uri = await mongoDB.getUri();
+  try {
+    await mongoose.connect(uri, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: true,
+    });
+  } catch (error) {
+    console.error(`It went wrong: ${error}`);
+  }
+};
 
-async function disconnect () {
-  await mongoose.connection.close()
-}
+const disconnectDB = async () => {
+  try {
+    await mongoose.connection.close(() => {
+      console.log("Disconnected from MongoDB");
+    });
+    if (process.env.ENVIRONMENT === "test") {
+      await mongoDB.stop();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 async function clearDatabase () {
   const collections = mongoose.connection.collections;
@@ -60,4 +57,8 @@ async function clearDatabase () {
   }
 }
 
-module.exports = { connectDB, disconnect, clearDatabase };
+mongoose.connection.once("open", function () {
+  console.log(`MongoDB ${process.env.ENVIRONMENT} is ready`);
+});
+
+module.exports = { connectDB, disconnectDB,clearDatabase };
