@@ -52,3 +52,4 @@ mongoose.connection.once("open", function () {
   console.log(`MongoDB ${process.env.ENVIRONMENT} is ready`);
 });
 
+module.exports = { connectDB, disconnectDB };

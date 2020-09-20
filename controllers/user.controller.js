@@ -1,7 +1,7 @@
 const { userModel } = require("../models/user.model");
 
 const userController = {
-  async authenticateUser (req, res) {
+  async authenticateUser(req, res) {
     const result = await userModel.authenticateUser(
       req.body.email,
       req.body.password
@@ -9,10 +9,10 @@ const userController = {
     if (!result.loggedIn) res.status(403).send(result.message);
     res.header("x-access-token", result.token).status(200).send({
       token: result.token,
-      user: result.user
+      user: result.user,
     });
   },
-  async registerUser (req, res) {
+  async registerUser(req, res) {
     // Check if user already exists HERE
     let user = {
       name: req.body.name,
@@ -24,14 +24,14 @@ const userController = {
     if (!userCreated) return res.sendStatus(500);
     res.sendStatus(201);
   },
-  async updateUser (req, res) {
+  async updateUser(req, res) {
     const user = await userModel.getUser(req.params.id);
     if (!user) return res.status(404).send("user not found");
     const updatedUser = await userModel.updateUser(req.params.id, req.body);
     if (!updatedUser) return res.sendStatus(500);
     res.status(200).send(updatedUser);
   },
-  async deleteUser (req, res) {
+  async deleteUser(req, res) {
     const user = await userModel.getUser(req.params.id);
     if (!user) return res.status(404).send("user not found");
 
@@ -39,12 +39,12 @@ const userController = {
     if (!deletedUser) return res.sendStatus(500);
     res.status(200).send("user deleted");
   },
-  async getUsers (req, res) {
+  async getUsers(req, res) {
     const users = await userModel.getUsers();
     if (!users) return res.status(404).send();
     res.status(200).send(users);
   },
-  async getUser (req, res) { },
+  async getUser(req, res) {},
 };
 
 module.exports = userController;
