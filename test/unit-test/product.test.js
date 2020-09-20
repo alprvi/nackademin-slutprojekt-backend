@@ -59,6 +59,9 @@ describe('Product Model', () => {
 
   it('should get all products', async function(){
     const allProduct = await Product.getProducts()
+
+    allProduct.should.have.lengthOf(2)
+    allProduct[0].should.have.property('title').equal('perspiciatis provident aliquid')
   })
 
 })
