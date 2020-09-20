@@ -14,13 +14,13 @@ const userController = {
   },
   async registerUser(req, res) {
     // Check if user already exists HERE
-    let user = {
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    };
+    let emailIsAlreadyRegistered = await userModel.getUserByEmail(
+      req.body.email
+    );
+    if (emailIsAlreadyRegistered)
+      return res.status(404).send("Email already registered");
 
-    let userCreated = await userModel.registerUser(user);
+    let userCreated = await userModel.registerUser(req.body);
     if (!userCreated) return res.sendStatus(500);
     res.sendStatus(201);
   },
