@@ -57,6 +57,7 @@ module.exports = {
     })
   },
   updateProduct: (productUpdated, id) => {
+    console.log(productUpdated)
     return Product.findByIdAndUpdate(id, productUpdated, {
       new: true,
       runValidators: true
