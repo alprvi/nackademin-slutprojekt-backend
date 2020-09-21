@@ -13,4 +13,4 @@ router.use("/api/users", userRouter);
 router.use("/api/products", productRouter);
 //router.use("/api/orders", orderRouter);
 
-module.exports = router
+module.exports = router;
