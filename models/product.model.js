@@ -63,7 +63,18 @@ module.exports = {
       runValidators: true
     })
   },
+
   deleteProduct: (id) => {
     return Product.remove({ _id: id })
+  },
+
+  getTotalPrice: async (items) => {
+    let total = 0
+    for (let i = 0; i < items.length; i++) {
+      const product = await Product.findById(items[i])
+      total += product.price
+    }
+    return total
+
   }
 };
