@@ -22,7 +22,15 @@ const userController = {
 
     let userCreated = await userModel.registerUser(req.body);
     if (!userCreated) return res.sendStatus(500);
-    res.sendStatus(201);
+    let result = await userModel.authenticateUser(
+      req.body.email,
+      req.body.password
+    );
+    if (!result.loggedIn) res.status(403).send(result.message);
+    res.header().status(201).send({
+      token: result.token,
+      user: result.user,
+    });
   },
   async updateUser(req, res) {
     const user = await userModel.getUser(req.params.id);
