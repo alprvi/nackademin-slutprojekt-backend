@@ -6,7 +6,8 @@
   "scripts": {
     "test": "cross-env ENVIRONMENT=test mocha --recursive",
     "startDev": "cross-env ENVIRONMENT=dev nodemon start",
-    "start": "cross-env ENVIRONMENT=dev node start"
+    "start": "cross-env ENVIRONMENT=staging node start",
+    "seedStagingDB": "cross-env ENVIRONMENT=staging node seed/product-seeder.js"
   },
   "repository": {
     "type": "git",

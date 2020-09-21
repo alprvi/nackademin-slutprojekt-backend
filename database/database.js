@@ -7,10 +7,15 @@ let mongoDB;
 switch (process.env.ENVIRONMENT) {
   case "development":
   case "dev":
+    mongoDB = {
+      getUri: async () =>
+        `mongodb+srv://${process.env.DBHOST}:${process.env.DBPASSWORD}@cluster0.rv20u.mongodb.net/${process.env.DBNAME_DEV}?retryWrites=true&w=majority`,
+    };
+    break;
   case "staging":
     mongoDB = {
       getUri: async () =>
-        `mongodb+srv://${process.env.DBHOST}:${process.env.DBPASSWORD}@cluster0.rv20u.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`,
+        `mongodb+srv://${process.env.DBHOST}:${process.env.DBPASSWORD}@cluster0.rv20u.mongodb.net/${process.env.DBNAME_STAGING}?retryWrites=true&w=majority`,
     };
     break;
   case "test":
