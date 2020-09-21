@@ -10,10 +10,55 @@ const schema = {
   orderValue: {
     type: Number,
   },
+  payment: {
+    cardCVV: {
+      type: String
+    },
+    cardNr: {
+      type: String
+    },
+    cardOwner: {
+      type: String
+    },
+    cardValidUntil: {
+      type: String
+    }
+  },
+  userId: {
+    type: String
+  }
 };
 
 const orderSchema = new mongoose.Schema(schema, { timestamps: true });
 
 const Order = mongoose.model("order", orderSchema);
 
-module.exports = { Order };
+module.exports = {
+  Order,
+  createOrder: (order) => {
+    return new Promise((resolve, reject) => {
+      Order.create(order, (err, newDoc) => {
+        if (err) reject(err);
+        resolve(newDoc);
+      })
+    })
+  },
+  getOrdersAdmin: () => {
+    return new Promise((resolve, reject) => {
+      Order.find({}, (err, newDoc) => {
+        if (err) reject(err);
+        resolve(newDoc);
+      })
+    })
+  },
+  getOrdersUser: (id) => {
+    console.log(id)
+    return new Promise((resolve, reject) => {
+      Order.find({ userId: id }, (err, newDoc) => {
+        if (err) reject(err);
+        resolve(newDoc);
+      })
+    })
+  },
+};
+
