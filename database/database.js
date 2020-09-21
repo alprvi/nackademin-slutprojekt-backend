@@ -33,7 +33,7 @@ const connectDB = async () => {
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
-      useFindAndModify: true,
+      useFindAndModify: false,
     });
   } catch (error) {
     console.error(`It went wrong: ${error}`);

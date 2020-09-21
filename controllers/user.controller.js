@@ -13,7 +13,6 @@ const userController = {
     });
   },
   async registerUser(req, res) {
-    // Check if user already exists HERE
     let emailIsAlreadyRegistered = await userModel.getUserByEmail(
       req.body.email
     );
