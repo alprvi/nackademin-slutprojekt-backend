@@ -1,15 +1,32 @@
 const orderModel = require('../models/order.model')
 const productModel = require('../models/product.model')
+const jwt = require('jsonwebtoken')
+require("dotenv").config()
 
 module.exports = {
   createOrder: async (req, res) => {
+    let order
     const total = await productModel.getTotalPrice(req.body.items)
-    if (req.body) {
-      let order = {
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.replace("Bearer ", "")
+      const payload = jwt.verify(token, process.env.JWT_SECRET)
+      req.user = payload
+      order = {
         items: req.body.items,
         orderValue: total,
-        userId: req.user.userId
+        userId: req.user.userId,
+        customer: req.body.customer,
+        payment: req.body.payment
       }
+    }else{
+      order = {
+        items: req.body.items,
+        orderValue: total,
+        customer: req.body.customer,
+        payment: req.body.payment
+      }
+    }
+    if (req.body) {
       try {
         const result = await orderModel.createOrder(order)
         res.status(200).json(result)

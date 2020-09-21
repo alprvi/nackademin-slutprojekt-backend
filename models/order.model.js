@@ -24,8 +24,23 @@ const schema = {
       type: String
     }
   },
+  customer: {
+    city: {
+      type: String
+    },
+    name: {
+      type: String
+    },
+    street: {
+      type: String
+    },
+    zip: {
+      type: String
+    }
+  },
   userId: {
-    type: String
+    type: String,
+    default: '123456'
   }
 };
 
