@@ -1,8 +1,8 @@
 require("dotenv").config();
 const chai = require("chai");
 
-const { connectDB, disconnectDB } = require("../database/database");
-const { userModel, User } = require("../models/user.model");
+const { connectDB, disconnectDB } = require("../../database/database");
+const { userModel, User } = require("../../models/user.model");
 
 chai.should();
 

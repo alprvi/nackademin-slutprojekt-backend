@@ -14,14 +14,8 @@ switch (process.env.ENVIRONMENT) {
     };
     break;
   case "test":
- /*    const { MongoMemoryServer } = require("mongodb-memory-server");
-    // mongoDB = new MongoMemoryServer(); */
-
-    mongoDB = {
-      // mongodb+srv://user:password@host/dbname
-      getUri: async () =>
-        `mongodb://127.0.0.1:27017/Nackademin-slutprojekt-test`
-    }
+    const { MongoMemoryServer } = require("mongodb-memory-server");
+    mongoDB = new MongoMemoryServer();
     break;
   default:
     throw new Error(`${process.env.ENVIRONMENT} is not a valid environment`);
@@ -46,15 +40,15 @@ const disconnectDB = async () => {
     await mongoose.connection.close(() => {
       console.log("Disconnected from MongoDB");
     });
-    /* if (process.env.ENVIRONMENT === "test") {
+    if (process.env.ENVIRONMENT === "test") {
       await mongoDB.stop();
-    } */
+    }
   } catch (error) {
     console.error(error);
   }
 };
 
-async function clearDatabase () {
+async function clearDatabase() {
   const collections = mongoose.connection.collections;
 
   for (const key in collections) {
@@ -67,4 +61,4 @@ mongoose.connection.once("open", function () {
   console.log(`MongoDB ${process.env.ENVIRONMENT} is ready`);
 });
 
-module.exports = { connectDB, disconnectDB,clearDatabase };
+module.exports = { connectDB, disconnectDB, clearDatabase };
