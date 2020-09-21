@@ -50,18 +50,34 @@ describe('Product Model', () => {
     result.should.have.property('title').equal('Tricky')
   })
 
-  it('should get a product', async  function () {
-    const resultGetProduct =  await Product.getProduct(this.result2._id)
+  it('should get a product', async function () {
+    const resultGetProduct = await Product.getProduct(this.result2._id)
 
     resultGetProduct.should.have.property('title').equal('ut quia voluptatem')
     resultGetProduct.should.be.an('object')
   })
 
-  it('should get all products', async function(){
+  it('should get all products', async function () {
     const allProduct = await Product.getProducts()
 
     allProduct.should.have.lengthOf(2)
     allProduct[0].should.have.property('title').equal('perspiciatis provident aliquid')
+  })
+
+  it('should update product', async function () {
+    const update = {
+      'title': 'Unicorn Board',
+      'price': '99999'
+    }
+    const updatedProduct = await Product.updateProduct(update, this.result2._id)
+
+    expect(updatedProduct.title).to.equal('Unicorn Board')
+  })
+
+  it('shoudl delete product', async function () {
+    const deleteProduct = await Product.deleteProduct(this.result2._id)
+
+    expect(deleteProduct.deletedCount).to.equal(1)
   })
 
 })
