@@ -20,7 +20,12 @@ module.exports = {
         payment: req.body.payment,
       };
     } else {
-      if(req.body.customer.name && req.body.customer.city && req.body.customer.street && req.body.customer.zip ){
+      if (
+        req.body.customer.name &&
+        req.body.customer.city &&
+        req.body.customer.street &&
+        req.body.customer.zip
+      ) {
         order = {
           items: req.body.items,
           orderValue: total,
@@ -33,6 +38,7 @@ module.exports = {
             if (orderCreated) {
               // Push to orderHistory array
               if (req.user) {
+                console.log(req.user);
                 await userModel.updateUser(req.user.userId, {
                   $push: {
                     orderHistory: orderCreated._id,
@@ -47,11 +53,13 @@ module.exports = {
           }
         } else {
           res.status(400).json("Invalid request");
-        } 
-      }else{
-      res.status(400).json("Invalid request, name city street & zip is required");
+        }
+      } else {
+        res
+          .status(400)
+          .json("Invalid request, name city street & zip is required");
+      }
     }
-  }
   },
   getOrders: async (req, res) => {
     let order;
