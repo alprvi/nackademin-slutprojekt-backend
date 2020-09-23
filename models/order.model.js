@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const schema = {
   status: {
     type: String,
+    default: 'inProcess'
   },
   items: {
     type: Array,
@@ -39,8 +40,7 @@ const schema = {
     }
   },
   userId: {
-    type: String,
-    default: '123456'
+    type: String
   }
 };
 
