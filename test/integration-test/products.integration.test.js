@@ -151,7 +151,6 @@ describe("Testing Product INTEGRATION", function () {
         .set("Authorization", `Bearer ${this.test.adminToken}`)
         .set("Content-Type", "application/json")
         .end((err, res) => {
-          console.log(res.body);
           chai.expect(err).to.be.null;
           res.should.have.status(200);
           res.body.should.have.property("message");

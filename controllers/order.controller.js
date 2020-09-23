@@ -49,16 +49,13 @@ module.exports = {
       console.log(err);
       res.status(400).json(err);
     }
-  }
-  ,
+  },
   getOrders: async (req, res) => {
     let order;
     try {
       if (req.user.role == "admin") {
         order = await orderModel.getOrdersAdmin();
       } else {
-        // order = await orderModel.getOrdersUser(req.user.userId);
-        // console.log(order);
         const user = await userModel.getUser(req.user.userId);
         // check if user has orders
         if (user.orderHistory.length > 0) {

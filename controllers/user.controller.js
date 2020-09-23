@@ -13,8 +13,6 @@ const userController = {
     });
   },
   async registerUser(req, res) {
-    // control Email, password, name, adress
-    console.log(req.body);
     let emailIsAlreadyRegistered = await userModel.getUserByEmail(
       req.body.email
     );
