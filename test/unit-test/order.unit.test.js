@@ -64,12 +64,9 @@ describe("Product order", () => {
         const orderResult = await order.createOrder(createOrder);
         orderResult.should.have.property("userId").equal("5f6b0493eaf2812d6ca709db");
     });
-    it("should get orders as admin", async function() {
-        
-
+    it("should get all orders as admin", async function() {
         const orderResult = await order.getOrdersAdmin();
-        console.log(orderResult + "hääääääääääär")
-        //orderResult.should.have.property("userId").equal("5f688aa2ea600b0dac2970c4");
+        orderResult.should.be.a("array")
     });
 
 });
