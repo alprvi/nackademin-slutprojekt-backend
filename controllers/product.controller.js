@@ -29,7 +29,7 @@ module.exports = {
         const result = await productModel.createProduct(req.body);
         res.status(201).json({
           message: "Product Created",
-          data: result,
+          product: result,
         });
       } catch (err) {
         console.log(err);
