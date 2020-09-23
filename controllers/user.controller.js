@@ -6,7 +6,7 @@ const userController = {
       req.body.email,
       req.body.password
     );
-    if (!result.loggedIn) res.status(403).send(result.message);
+    if (!result.loggedIn) return res.status(403).send(result.message);
     res.status(200).send({
       token: result.token,
       user: result.user,
