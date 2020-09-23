@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const schema = {
   status: {
     type: String,
+    default: "inProcess"
   },
   items: {
     type: Array,
@@ -27,15 +28,19 @@ const schema = {
   customer: {
     city: {
       type: String,
+      required: true
     },
     name: {
       type: String,
+      required: true
     },
     street: {
       type: String,
+      required: true
     },
     zip: {
       type: String,
+      required: true
     },
   },
   userId: {

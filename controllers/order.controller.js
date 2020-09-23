@@ -20,34 +20,38 @@ module.exports = {
         payment: req.body.payment,
       };
     } else {
-      order = {
-        items: req.body.items,
-        orderValue: total,
-        customer: req.body.customer,
-        payment: req.body.payment,
-      };
-    }
-    if (req.body) {
-      try {
-        const orderCreated = await orderModel.createOrder(order);
-        if (orderCreated) {
-          // Push to orderHistory array
-          if (req.user) {
-            await userModel.updateUser(req.user.userId, {
-              $push: {
-                orderHistory: orderCreated._id,
-              },
-            });
+      if(req.body.customer.name && req.body.customer.city && req.body.customer.street && req.body.customer.zip ){
+        order = {
+          items: req.body.items,
+          orderValue: total,
+          customer: req.body.customer,
+          payment: req.body.payment,
+        };
+        if (req.body) {
+          try {
+            const orderCreated = await orderModel.createOrder(order);
+            if (orderCreated) {
+              // Push to orderHistory array
+              if (req.user) {
+                await userModel.updateUser(req.user.userId, {
+                  $push: {
+                    orderHistory: orderCreated._id,
+                  },
+                });
+              }
+              res.status(200).json(orderCreated);
+            }
+          } catch (err) {
+            console.log(err);
+            res.status(400).json(err);
           }
-          res.status(200).json(orderCreated);
-        }
-      } catch (err) {
-        console.log(err);
-        res.status(400).json(err);
-      }
-    } else {
-      res.status(400).json("Invalid request");
+        } else {
+          res.status(400).json("Invalid request");
+        } 
+      }else{
+      res.status(400).json("Invalid request, name city street & zip is required");
     }
+  }
   },
   getOrders: async (req, res) => {
     let order;
