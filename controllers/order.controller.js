@@ -15,7 +15,6 @@ module.exports = {
       order = {
         items: req.body.items,
         orderValue: total,
-        userId: req.user.userId,
         customer: req.body.customer,
         payment: req.body.payment,
       };
@@ -33,7 +32,7 @@ module.exports = {
           payment: req.body.payment,
         };
       } else {
-        res
+        return res
           .status(400)
           .json("Invalid request, name city street & zip is required");
       }
