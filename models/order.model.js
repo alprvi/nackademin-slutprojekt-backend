@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const schema = {
   status: {
     type: String,
-    default: 'inProcess'
+    default: "inProcess"
   },
   items: {
     type: Array,
@@ -13,35 +13,40 @@ const schema = {
   },
   payment: {
     cardCVV: {
-      type: String
+      type: String,
     },
     cardNr: {
-      type: String
+      type: String,
     },
     cardOwner: {
-      type: String
+      type: String,
     },
     cardValidUntil: {
-      type: String
-    }
+      type: String,
+    },
   },
   customer: {
     city: {
-      type: String
+      type: String,
+      required: true
     },
     name: {
-      type: String
+      type: String,
+      required: true
     },
     street: {
-      type: String
+      type: String,
+      required: true
     },
     zip: {
-      type: String
-    }
+      type: String,
+      required: true
+    },
   },
   userId: {
-    type: String
-  }
+    type: String,
+    default: "anonym",
+  },
 };
 
 const orderSchema = new mongoose.Schema(schema, { timestamps: true });
@@ -55,25 +60,37 @@ module.exports = {
       Order.create(order, (err, newDoc) => {
         if (err) reject(err);
         resolve(newDoc);
-      })
-    })
+      });
+    });
   },
   getOrdersAdmin: () => {
     return new Promise((resolve, reject) => {
       Order.find({}, (err, newDoc) => {
         if (err) reject(err);
         resolve(newDoc);
-      })
-    })
+      });
+    });
   },
   getOrdersUser: (id) => {
-    console.log(id)
+    console.log(id);
     return new Promise((resolve, reject) => {
       Order.find({ userId: id }, (err, newDoc) => {
         if (err) reject(err);
         resolve(newDoc);
-      })
-    })
+      });
+    });
+  },
+  async getOrders(arrayOfOrders) {
+    let result = [];
+    try {
+      for (orderId of arrayOfOrders) {
+        const order = await Order.find({ _id: orderId.toString() }).exec();
+        result.push(order[0]);
+      }
+      return result;
+    } catch (error) {
+      console.log(error);
+      return result;
+    }
   },
 };
-

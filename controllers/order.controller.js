@@ -20,32 +20,38 @@ module.exports = {
         payment: req.body.payment,
       };
     } else {
-      order = {
-        items: req.body.items,
-        orderValue: total,
-        customer: req.body.customer,
-        payment: req.body.payment,
-      };
+      if(req.body.customer.name && req.body.customer.city && req.body.customer.street && req.body.customer.zip ){
+        order = {
+          items: req.body.items,
+          orderValue: total,
+          customer: req.body.customer,
+          payment: req.body.payment,
+        };
+        if (req.body) {
+          try {
+            const orderCreated = await orderModel.createOrder(order);
+            if (orderCreated) {
+              // Push to orderHistory array
+              if (req.user) {
+                await userModel.updateUser(req.user.userId, {
+                  $push: {
+                    orderHistory: orderCreated._id,
+                  },
+                });
+              }
+              res.status(200).json(orderCreated);
+            }
+          } catch (err) {
+            console.log(err);
+            res.status(400).json(err);
+          }
+        } else {
+          res.status(400).json("Invalid request");
+        } 
+      }else{
+      res.status(400).json("Invalid request, name city street & zip is required");
     }
-    if (req.body) {
-      try {
-        const orderCreated = await orderModel.createOrder(order);
-        if (orderCreated) {
-          // Push to orderHistory array
-          await userModel.updateUser(req.user.userId, {
-            $push: {
-              orderHistory: orderCreated._id,
-            },
-          });
-          res.status(200).json(orderCreated);
-        }
-      } catch (err) {
-        console.log(err);
-        res.status(400).json(err);
-      }
-    } else {
-      res.status(400).json("Invalid request");
-    }
+  }
   },
   getOrders: async (req, res) => {
     let order;
@@ -53,7 +59,16 @@ module.exports = {
       if (req.user.role == "admin") {
         order = await orderModel.getOrdersAdmin();
       } else {
-        order = await orderModel.getOrdersUser(req.user.userId);
+        // order = await orderModel.getOrdersUser(req.user.userId);
+        // console.log(order);
+        const user = await userModel.getUser(req.user.userId);
+        // check if user has orders
+        if (user.orderHistory.length > 0) {
+          orderArray = user.orderHistory;
+          order = await orderModel.getOrders(orderArray);
+        } else {
+          order = [];
+        }
       }
       res.status(200).json(order);
     } catch (err) {
