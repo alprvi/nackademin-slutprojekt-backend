@@ -20,7 +20,12 @@ describe("Product order", () => {
             items: ["5f688a75de5f9538a8575958", "5f688a75de5f9538a857595e"],
             orderValue: 100,
             userId: "5f688aa2ea600b0dac2970c4",
-            customer: {},
+            customer: {
+                    zip: 123456,
+                    street: "test_street",
+                    name: "test_name",
+                    city: "test_city",
+            },
             payment: {}
         }
         const createUser = {
@@ -46,7 +51,13 @@ describe("Product order", () => {
             items: ["5f688a75de5f9538a8575958", "5f688a75de5f9538a857595e"],
             orderValue: 100,
             userId: "5f6b0493eaf2812d6ca709db",
-            customer: {},
+            customer: {
+                zip: 123456,
+                street: "test_street",
+                name: "test_name",
+                city: "test_city"
+
+            },
             payment: {}
         }
 
