@@ -12,27 +12,26 @@ module.exports = {
       const token = req.headers.authorization.replace("Bearer ", "");
       const payload = jwt.verify(token, process.env.JWT_SECRET);
       req.user = payload;
+    }
+    if (
+      req.body.customer.name &&
+      req.body.customer.city &&
+      req.body.customer.street &&
+      req.body.customer.zip
+    ) {
       order = {
         items: req.body.items,
         orderValue: total,
-        userId: req.user.userId,
         customer: req.body.customer,
         payment: req.body.payment,
       };
     } else {
-      if (req.body.customer.name && req.body.customer.city && req.body.customer.street && req.body.customer.zip) {
-        order = {
-          items: req.body.items,
-          orderValue: total,
-          customer: req.body.customer,
-          payment: req.body.payment,
-        };
-      } else {
-        res.status(400).json("Invalid request, name city street & zip is required");
-      }
+      return res
+        .status(400)
+        .json("Invalid request, name city street & zip is required");
     }
-    if (req.body) {
-      try {
+    try {
+      if (req.body) {
         const orderCreated = await orderModel.createOrder(order);
         if (orderCreated) {
           // Push to orderHistory array
@@ -45,10 +44,10 @@ module.exports = {
           }
           res.status(200).json(orderCreated);
         }
-      } catch (err) {
-        console.log(err);
-        res.status(400).json(err);
       }
+    } catch (err) {
+      console.log(err);
+      res.status(400).json(err);
     }
   },
   getOrders: async (req, res) => {
@@ -57,8 +56,6 @@ module.exports = {
       if (req.user.role == "admin") {
         order = await orderModel.getOrdersAdmin();
       } else {
-        // order = await orderModel.getOrdersUser(req.user.userId);
-        // console.log(order);
         const user = await userModel.getUser(req.user.userId);
         // check if user has orders
         if (user.orderHistory.length > 0) {
