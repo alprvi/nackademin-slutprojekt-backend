@@ -63,11 +63,11 @@ module.exports = {
         // console.log(order);
         const user = await userModel.getUser(req.user.userId);
         // check if user has orders
-        if (user.orderHistory.length !== 0) {
+        if (user.orderHistory.length > 0) {
           orderArray = user.orderHistory;
           order = await orderModel.getOrders(orderArray);
         } else {
-          order = "";
+          order = [];
         }
       }
       res.status(200).json(order);
