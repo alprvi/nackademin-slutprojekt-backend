@@ -7,7 +7,7 @@ const userController = {
       req.body.password
     );
     if (!result.loggedIn) res.status(403).send(result.message);
-    res.header().status(200).send({
+    res.status(200).send({
       token: result.token,
       user: result.user,
     });
@@ -26,7 +26,7 @@ const userController = {
       req.body.password
     );
     if (!result.loggedIn) res.status(403).send(result.message);
-    res.header().status(201).send({
+    res.status(201).send({
       token: result.token,
       user: result.user,
     });
