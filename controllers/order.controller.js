@@ -7,6 +7,7 @@ require("dotenv").config();
 module.exports = {
   createOrder: async (req, res) => {
     let order;
+
     const total = await productModel.getTotalPrice(req.body.items);
     if (req.headers.authorization) {
       const token = req.headers.authorization.replace("Bearer ", "");
@@ -51,12 +52,14 @@ module.exports = {
     }
   },
   getOrders: async (req, res) => {
+    console.log(req.user.userId)
     let order;
     try {
       if (req.user.role == "admin") {
         order = await orderModel.getOrdersAdmin();
       } else {
         const user = await userModel.getUser(req.user.userId);
+        console.log(user,'user')
         // check if user has orders
         if (user.orderHistory.length > 0) {
           orderArray = user.orderHistory;

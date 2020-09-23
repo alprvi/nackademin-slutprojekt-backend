@@ -67,20 +67,14 @@ module.exports = {
       });
     });
   },
-  getOrdersUser: (id) => {
-    console.log(id);
-    return new Promise((resolve, reject) => {
-      Order.find({ userId: id }, (err, newDoc) => {
-        if (err) reject(err);
-        resolve(newDoc);
-      });
-    });
-  },
   async getOrders(arrayOfOrders) {
+    console.log(arrayOfOrders,'array')
     let result = [];
     try {
       for (orderId of arrayOfOrders) {
+
         const order = await Order.find({ _id: orderId.toString() }).exec();
+        console.log(order,'order')
         result.push(order[0]);
       }
       return result;
