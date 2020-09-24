@@ -7,6 +7,7 @@ require("dotenv").config();
 module.exports = {
   createOrder: async (req, res) => {
     let order;
+
     const total = await productModel.getTotalPrice(req.body.items);
     if (req.headers.authorization) {
       const token = req.headers.authorization.replace("Bearer ", "");
